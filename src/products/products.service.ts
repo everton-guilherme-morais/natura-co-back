@@ -13,4 +13,27 @@ export class ProductsService {
       },
     });
   }
+
+  async searchProducts(sex?: string, name?: string) {
+    const whereConditions: any = {};
+
+    if (sex) {
+      whereConditions.sex = sex;
+    }
+
+    if (name) {
+      whereConditions.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
+
+    return this.prisma.product.findMany({
+      where: whereConditions,
+      include: {
+        assessments: true,
+        goodToKnow: true,
+      },
+    });
+  }
 }
