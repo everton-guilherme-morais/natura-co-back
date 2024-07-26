@@ -8,7 +8,7 @@ generator client {
 }
 
 model Product {
-  id                Int          @id @default(autoincrement())
+  id                BigInt       @id @default(autoincrement())
   name              String
   brand             String
   imageCover        String
@@ -30,15 +30,15 @@ model Product {
 }
 
 model GoodToKnow {
-  id          Int     @id @default(autoincrement())
-  productId   Int
+  id          BigInt  @id @default(autoincrement())
+  productId   BigInt
   product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   description String
 }
 
 model Assessment {
-  id           Int      @id @default(autoincrement())
-  productId    Int
+  id           BigInt   @id @default(autoincrement())
+  productId    BigInt
   product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   name         String
   comment      String

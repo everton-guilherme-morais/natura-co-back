@@ -1,4 +1,10 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
 
@@ -12,7 +18,19 @@ export class ProductsController {
   }
 
   @Get('search')
-  searchProducts(@Query('sex') sex?: string, @Query('name') name?: string) {
+  searchProducts(
+    @Query('category') sex?: string,
+    @Query('name') name?: string,
+  ) {
     return this.productsService.searchProducts(sex, name);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const productId = parseInt(id, 10);
+    if (isNaN(productId)) {
+      throw new BadRequestException('Invalid product ID');
+    }
+    return this.productsService.findProductById(productId);
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { Product } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
@@ -14,11 +15,11 @@ export class ProductsService {
     });
   }
 
-  async searchProducts(sex?: string, name?: string) {
+  async searchProducts(category?: string, name?: string) {
     const whereConditions: any = {};
 
-    if (sex) {
-      whereConditions.sex = sex;
+    if (category) {
+      whereConditions.sex = category;
     }
 
     if (name) {
@@ -28,8 +29,19 @@ export class ProductsService {
       };
     }
 
-    return this.prisma.product.findMany({
+    const results = await this.prisma.product.findMany({
       where: whereConditions,
+      include: {
+        assessments: true,
+        goodToKnow: true,
+      },
+    });
+    return results;
+  }
+
+  async findProductById(id: number): Promise<Product | null> {
+    return this.prisma.product.findUnique({
+      where: { id: id },
       include: {
         assessments: true,
         goodToKnow: true,
