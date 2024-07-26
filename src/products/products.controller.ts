@@ -8,11 +8,6 @@ export class ProductsController {
 
   @Get()
   async findAll(): Promise<Product[]> {
-    return this.productsService.findAll();
-  }
-
-  @Get('boot')
-  async routeTeste() {
-    return this.productsService.routeTeste();
+    return this.productsService.getProducts();
   }
 }

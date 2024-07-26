@@ -8,29 +8,25 @@ generator client {
 }
 
 model Product {
-  id            Int          @id @default(autoincrement())
-  name          String
-  imageCover    String
-  images        Image[]
-  stars         Int
-  valueOfficial String
-  valueInitial  String
-  discount      Int
-  category      String
-  for           String
-  description   String
-  size          String? // nullable field
-  comments      Int
-  goodToKnow    GoodToKnow[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-}
-
-model Image {
-  id        Int     @id @default(autoincrement())
-  productId Int
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  image     String
+  id                Int          @id @default(autoincrement())
+  name              String
+  brand             String
+  imageCover        String
+  stars             Int
+  discount          Int?
+  category          String
+  description       String
+  size              String? // nullable field
+  instalments       Int
+  assessments       Assessment[]
+  goodToKnow        GoodToKnow[]
+  priceInitial      String
+  priceWithDiscount String
+  quantity          Int
+  stateProduct      String?
+  sex               String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 model GoodToKnow {
@@ -38,4 +34,14 @@ model GoodToKnow {
   productId   Int
   product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   description String
+}
+
+model Assessment {
+  id           Int      @id @default(autoincrement())
+  productId    Int
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name         String
+  comment      String
+  stars        Int
+  dateCommment DateTime
 }
