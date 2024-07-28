@@ -47,7 +47,7 @@ export class ProductsController {
     if (!parsedData.success) {
       throw new BadRequestException('Invalid payload');
     }
-    console.log(parsedData.data, 'parsedData.data');
+
     return this.productsService.addProductsToCart(parsedData.data);
   }
 }
