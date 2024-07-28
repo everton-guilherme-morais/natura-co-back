@@ -21,5 +21,4 @@ export class Product {
   priceWithDiscount: string;
   quantity: number;
   stateProduct?: string;
-  sex: string;
 }

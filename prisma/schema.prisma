@@ -8,7 +8,7 @@ generator client {
 }
 
 model Product {
-  id                BigInt       @id @default(autoincrement())
+  id                Int          @id @default(autoincrement())
   name              String
   brand             String
   imageCover        String
@@ -16,7 +16,7 @@ model Product {
   discount          Int?
   category          String
   description       String
-  size              String? // nullable field
+  size              String?
   instalments       Int
   assessments       Assessment[]
   goodToKnow        GoodToKnow[]
@@ -24,24 +24,34 @@ model Product {
   priceWithDiscount String
   quantity          Int
   stateProduct      String?
-  sex               String
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+  cartItems         Cart[]
 }
 
 model GoodToKnow {
-  id          BigInt  @id @default(autoincrement())
-  productId   BigInt
-  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id          Int     @id @default(autoincrement())
+  productId   Int
   description String
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Assessment {
-  id           BigInt   @id @default(autoincrement())
-  productId    BigInt
-  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id           Int      @id @default(autoincrement())
+  productId    Int
   name         String
   comment      String
   stars        Int
   dateCommment DateTime
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  sessionId String   @db.VarChar(255)
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
+import { cartSchema } from './entities/validation/productValidation';
+import { z } from 'zod';
 
 @Injectable()
 export class ProductsService {
@@ -19,7 +21,7 @@ export class ProductsService {
     const whereConditions: any = {};
 
     if (category) {
-      whereConditions.sex = category;
+      whereConditions.category = category;
     }
 
     if (name) {
@@ -47,5 +49,21 @@ export class ProductsService {
         goodToKnow: true,
       },
     });
+  }
+
+  async addProductsToCart(
+    cartData: z.infer<typeof cartSchema>,
+  ): Promise<{ sessionId: string }> {
+    const cartItems = cartData.products.map((product) => ({
+      sessionId: cartData.sessionId,
+      productId: product.id,
+      quantity: product.quantity,
+    }));
+
+    await this.prisma.cart.createMany({
+      data: cartItems,
+    });
+
+    return { sessionId: cartData.sessionId };
   }
 }

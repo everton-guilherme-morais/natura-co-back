@@ -1,12 +1,16 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Param,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
+import { cartSchema } from './entities/validation/productValidation';
+import { z } from 'zod';
 
 @Controller('products')
 export class ProductsController {
@@ -19,10 +23,10 @@ export class ProductsController {
 
   @Get('search')
   searchProducts(
-    @Query('category') sex?: string,
+    @Query('category') category?: string,
     @Query('name') name?: string,
   ) {
-    return this.productsService.searchProducts(sex, name);
+    return this.productsService.searchProducts(category, name);
   }
 
   @Get(':id')
@@ -32,5 +36,18 @@ export class ProductsController {
       throw new BadRequestException('Invalid product ID');
     }
     return this.productsService.findProductById(productId);
+  }
+
+  @Post('cart')
+  async addProductsToCart(
+    @Body() cartData: z.infer<typeof cartSchema>,
+  ): Promise<{ sessionId: string }> {
+    const parsedData = cartSchema.safeParse(cartData);
+
+    if (!parsedData.success) {
+      throw new BadRequestException('Invalid payload');
+    }
+    console.log(parsedData.data, 'parsedData.data');
+    return this.productsService.addProductsToCart(parsedData.data);
   }
 }
