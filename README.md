@@ -16,6 +16,8 @@ Este repositório contém o backend para o projeto de clone do site de e-commerc
 - **Prisma**: ORM para interagir com o banco de dados.
 - **Jest**: Framework de testes para garantir a qualidade do código.
 
+- **Banco de dados hospedado dentro da Vercel**
+
 ## Configuração do Projeto
 
 1. **Clone o repositório:**
